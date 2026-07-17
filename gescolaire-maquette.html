@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<title>Gescolaire — Maquette</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#EDEFEA;
+    --surface:#FFFFFF;
+    --ink:#16302B;
+    --ink-soft:#5B6E68;
+    --border:#DCE1D8;
+    --accent-gold:#C08A34;
+    --green:#3F7A5E;
+    --green-bg:#E7F1EB;
+    --red:#B54B3A;
+    --red-bg:#F7E9E5;
+    --amber:#B9862A;
+    --amber-bg:#F3E9D6;
+    --sidebar:#16302B;
+    --sidebar-soft:#9FB6AE;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  body{
+    font-family:'IBM Plex Sans', sans-serif;
+    background:var(--bg);
+    color:var(--ink);
+    display:flex;
+    min-height:100vh;
+    font-size:14px;
+  }
+  h1,h2,h3,.brand{font-family:'Fraunces', serif;}
+
+  /* Sidebar */
+  .sidebar{
+    width:220px;
+    background:var(--sidebar);
+    color:#EDEFEA;
+    display:flex;
+    flex-direction:column;
+    padding:28px 0;
+    flex-shrink:0;
+  }
+  .brand{
+    font-size:22px;
+    font-weight:700;
+    padding:0 24px 28px 24px;
+    border-bottom:1px solid rgba(255,255,255,0.12);
+    margin-bottom:20px;
+    letter-spacing:0.02em;
+  }
+  .brand span{color:var(--accent-gold);}
+  .nav-item{
+    padding:12px 24px;
+    font-size:14px;
+    color:var(--sidebar-soft);
+    cursor:pointer;
+    border-left:3px solid transparent;
+    transition:all .15s ease;
+    display:flex;
+    align-items:center;
+    gap:10px;
+  }
+  .nav-item:hover{color:#fff; background:rgba(255,255,255,0.04);}
+  .nav-item.active{
+    color:#fff;
+    background:rgba(255,255,255,0.06);
+    border-left-color:var(--accent-gold);
+    font-weight:600;
+  }
+  .nav-footer{
+    margin-top:auto;
+    padding:16px 24px 0 24px;
+    border-top:1px solid rgba(255,255,255,0.12);
+    font-size:12px;
+    color:var(--sidebar-soft);
+  }
+
+  /* Main */
+  .main{flex:1; padding:32px 40px; max-width:1200px;}
+  .topbar{display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:28px;}
+  .topbar h1{font-size:26px; font-weight:600;}
+  .topbar p{color:var(--ink-soft); margin-top:4px; font-size:14px;}
+  .school-tag{
+    background:var(--surface); border:1px solid var(--border); border-radius:8px;
+    padding:8px 14px; font-size:13px; color:var(--ink-soft);
+  }
+  .school-tag b{color:var(--ink);}
+
+  .view{display:none;}
+  .view.active{display:block;}
+
+  /* Stat cards */
+  .stats{display:grid; grid-template-columns:repeat(4,1fr); gap:16px; margin-bottom:28px;}
+  .stat-card{
+    background:var(--surface); border:1px solid var(--border); border-radius:10px;
+    padding:18px 20px;
+  }
+  .stat-label{font-size:12px; text-transform:uppercase; letter-spacing:0.06em; color:var(--ink-soft); margin-bottom:8px;}
+  .stat-value{font-family:'IBM Plex Mono', monospace; font-size:22px; font-weight:600;}
+  .stat-sub{font-size:12px; margin-top:6px; color:var(--ink-soft);}
+  .stat-sub.up{color:var(--green);}
+  .stat-sub.down{color:var(--red);}
+
+  /* Panels */
+  .panel{
+    background:var(--surface); border:1px solid var(--border); border-radius:10px;
+    margin-bottom:24px; overflow:hidden;
+  }
+  .panel-head{
+    padding:18px 22px; border-bottom:1px solid var(--border);
+    display:flex; justify-content:space-between; align-items:center;
+  }
+  .panel-head h2{font-size:17px; font-weight:600;}
+  .panel-head .hint{font-size:12px; color:var(--ink-soft);}
+
+  table{width:100%; border-collapse:collapse;}
+  th{
+    text-align:left; font-size:11px; text-transform:uppercase; letter-spacing:0.05em;
+    color:var(--ink-soft); padding:12px 22px; border-bottom:1px solid var(--border);
+    font-weight:600;
+  }
+  td{padding:14px 22px; border-bottom:1px solid var(--border); font-size:14px; vertical-align:middle;}
+  tr:last-child td{border-bottom:none;}
+  tr:hover td{background:#FAFAF7;}
+  .amount{font-family:'IBM Plex Mono', monospace; font-weight:500;}
+  .student-name{font-weight:600;}
+  .student-class{color:var(--ink-soft); font-size:12px; margin-top:2px;}
+
+  /* Stamp badge — signature element */
+  .stamp{
+    display:inline-flex; align-items:center; justify-content:center;
+    min-width:76px; padding:5px 10px;
+    border-radius:20px;
+    border:1.5px dashed currentColor;
+    font-family:'IBM Plex Mono', monospace;
+    font-size:10.5px; font-weight:600; letter-spacing:0.08em;
+    text-transform:uppercase;
+    transform:rotate(-2deg);
+  }
+  .stamp.paye{color:var(--green); background:var(--green-bg);}
+  .stamp.partiel{color:var(--amber); background:var(--amber-bg);}
+  .stamp.retard{color:var(--red); background:var(--red-bg); transform:rotate(2deg);}
+
+  .search-bar{
+    display:flex; gap:10px; padding:14px 22px; border-bottom:1px solid var(--border);
+    background:#FAFAF7;
+  }
+  .search-bar input{
+    flex:1; padding:8px 12px; border:1px solid var(--border); border-radius:6px;
+    font-family:inherit; font-size:13px; background:#fff;
+  }
+  .search-bar input:focus{outline:2px solid var(--accent-gold); outline-offset:-1px;}
+  .btn{
+    padding:8px 16px; border-radius:6px; border:none; font-family:inherit;
+    font-size:13px; font-weight:600; cursor:pointer;
+  }
+  .btn-primary{background:var(--ink); color:#fff;}
+  .btn-primary:hover{background:#0d211d;}
+  .filter-chip{
+    padding:6px 12px; border-radius:20px; border:1px solid var(--border);
+    font-size:12px; cursor:pointer; background:#fff; color:var(--ink-soft);
+  }
+  .filter-chip.active{background:var(--ink); color:#fff; border-color:var(--ink);}
+
+  .two-col{display:grid; grid-template-columns:1.4fr 1fr; gap:24px;}
+
+  .mini-list{padding:6px 0;}
+  .mini-item{
+    display:flex; justify-content:space-between; padding:12px 22px;
+    border-bottom:1px solid var(--border); font-size:13px;
+  }
+  .mini-item:last-child{border-bottom:none;}
+  .mini-item .name{font-weight:600;}
+  .mini-item .due{color:var(--red); font-family:'IBM Plex Mono', monospace; font-size:12px;}
+
+  footer.note{
+    font-size:12px; color:var(--ink-soft); text-align:center; padding:20px 0 4px 0;
+  }
+</style>
+</head>
+<body>
+
+<div class="sidebar">
+  <div class="brand">Gesco<span>laire</span></div>
+  <div class="nav-item active" data-view="dashboard">📊 Tableau de bord</div>
+  <div class="nav-item" data-view="eleves">🧑‍🎓 Élèves</div>
+  <div class="nav-item" data-view="paiements">💳 Paiements</div>
+  <div class="nav-item" data-view="notes">📝 Notes</div>
+  <div class="nav-footer">Maquette — Phase 1<br>Groupe Scolaire Étoile du Matin</div>
+</div>
+
+<div class="main">
+
+  <!-- DASHBOARD -->
+  <div class="view active" id="dashboard">
+    <div class="topbar">
+      <div>
+        <h1>Tableau de bord</h1>
+        <p>Année scolaire 2025 – 2026 · Mise à jour aujourd'hui</p>
+      </div>
+      <div class="school-tag">🏫 <b>Groupe Scolaire Étoile du Matin</b> · Conakry</div>
+    </div>
+
+    <div class="stats">
+      <div class="stat-card">
+        <div class="stat-label">Élèves inscrits</div>
+        <div class="stat-value">312</div>
+        <div class="stat-sub up">+8 ce mois</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Encaissé ce mois</div>
+        <div class="stat-value">18 450 000 GNF</div>
+        <div class="stat-sub up">↑ 12% vs mois dernier</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Impayés en cours</div>
+        <div class="stat-value">6 200 000 GNF</div>
+        <div class="stat-sub down">37 élèves concernés</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Taux de recouvrement</div>
+        <div class="stat-value">88 %</div>
+        <div class="stat-sub">Objectif : 95 %</div>
+      </div>
+    </div>
+
+    <div class="two-col">
+      <div class="panel">
+        <div class="panel-head">
+          <h2>Derniers paiements</h2>
+          <span class="hint">7 derniers jours</span>
+        </div>
+        <table>
+          <thead><tr><th>Élève</th><th>Classe</th><th>Montant</th><th>Statut</th></tr></thead>
+          <tbody>
+            <tr><td class="student-name">Mamadou Diallo</td><td>CM2 A</td><td class="amount">750 000 GNF</td><td><span class="stamp paye">Payé</span></td></tr>
+            <tr><td class="student-name">Aïssatou Barry</td><td>6ème B</td><td class="amount">400 000 GNF</td><td><span class="stamp partiel">Partiel</span></td></tr>
+            <tr><td class="student-name">Ibrahima Sow</td><td>3ème A</td><td class="amount">900 000 GNF</td><td><span class="stamp paye">Payé</span></td></tr>
+            <tr><td class="student-name">Fatoumata Camara</td><td>CE1 B</td><td class="amount">300 000 GNF</td><td><span class="stamp paye">Payé</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="panel">
+        <div class="panel-head">
+          <h2>Échéances en retard</h2>
+          <span class="hint">à relancer</span>
+        </div>
+        <div class="mini-list">
+          <div class="mini-item"><span class="name">Mohamed Bah — 5ème A</span><span class="due">450 000 GNF</span></div>
+          <div class="mini-item"><span class="name">Kadiatou Touré — CM1 A</span><span class="due">600 000 GNF</span></div>
+          <div class="mini-item"><span class="name">Alpha Diallo — 4ème B</span><span class="due">380 000 GNF</span></div>
+          <div class="mini-item"><span class="name">Mariama Bangoura — CE2 A</span><span class="due">700 000 GNF</span></div>
+          <div class="mini-item"><span class="name">Ousmane Keïta — 2nde A</span><span class="due">520 000 GNF</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ELEVES -->
+  <div class="view" id="eleves">
+    <div class="topbar">
+      <div>
+        <h1>Élèves</h1>
+        <p>312 élèves inscrits · année 2025–2026</p>
+      </div>
+      <button class="btn btn-primary">+ Ajouter un élève</button>
+    </div>
+
+    <div class="panel">
+      <div class="search-bar">
+        <input type="text" placeholder="Rechercher un élève par nom ou classe…">
+        <span class="filter-chip active">Toutes les classes</span>
+        <span class="filter-chip">Primaire</span>
+        <span class="filter-chip">Collège</span>
+        <span class="filter-chip">Lycée</span>
+      </div>
+      <table>
+        <thead><tr><th>Élève</th><th>Classe</th><th>Tuteur</th><th>Contact</th><th>Frais annuels</th><th>Statut paiement</th></tr></thead>
+        <tbody>
+          <tr><td><div class="student-name">Mamadou Diallo</div><div class="student-class">Né le 03/04/2014</div></td><td>CM2 A</td><td>Fatoumata Diallo</td><td>622 00 00 01</td><td class="amount">3 000 000 GNF</td><td><span class="stamp paye">Payé</span></td></tr>
+          <tr><td><div class="student-name">Aïssatou Barry</div><div class="student-class">Née le 12/09/2013</div></td><td>6ème B</td><td>Ibrahim Barry</td><td>664 00 00 02</td><td class="amount">3 500 000 GNF</td><td><span class="stamp partiel">Partiel</span></td></tr>
+          <tr><td><div class="student-name">Ibrahima Sow</div><div class="student-class">Né le 21/01/2011</div></td><td>3ème A</td><td>Mariam Sow</td><td>628 00 00 03</td><td class="amount">4 200 000 GNF</td><td><span class="stamp paye">Payé</span></td></tr>
+          <tr><td><div class="student-name">Mohamed Bah</div><div class="student-class">Né le 15/06/2012</div></td><td>5ème A</td><td>Alhassane Bah</td><td>625 00 00 04</td><td class="amount">3 800 000 GNF</td><td><span class="stamp retard">En retard</span></td></tr>
+          <tr><td><div class="student-name">Kadiatou Touré</div><div class="student-class">Née le 08/11/2015</div></td><td>CM1 A</td><td>Sekou Touré</td><td>620 00 00 05</td><td class="amount">2 900 000 GNF</td><td><span class="stamp retard">En retard</span></td></tr>
+          <tr><td><div class="student-name">Mariama Bangoura</div><div class="student-class">Née le 27/02/2016</div></td><td>CE2 A</td><td>Aboubacar Bangoura</td><td>666 00 00 06</td><td class="amount">2 700 000 GNF</td><td><span class="stamp retard">En retard</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- PAIEMENTS -->
+  <div class="view" id="paiements">
+    <div class="topbar">
+      <div>
+        <h1>Paiements</h1>
+        <p>Suivi de la scolarité par élève</p>
+      </div>
+      <button class="btn btn-primary">+ Enregistrer un paiement</button>
+    </div>
+
+    <div class="panel">
+      <div class="panel-head">
+        <h2>Aïssatou Barry — 6ème B</h2>
+        <span class="hint">Frais annuels : 3 500 000 GNF</span>
+      </div>
+      <table>
+        <thead><tr><th>Date</th><th>Type</th><th>Moyen</th><th>Montant</th><th>Reçu par</th></tr></thead>
+        <tbody>
+          <tr><td>02/09/2025</td><td>Inscription</td><td>Orange Money</td><td class="amount">500 000 GNF</td><td>Secrétariat</td></tr>
+          <tr><td>15/10/2025</td><td>1ère tranche</td><td>Espèces</td><td class="amount">1 000 000 GNF</td><td>Secrétariat</td></tr>
+          <tr><td>20/01/2026</td><td>2ème tranche</td><td>MTN MoMo</td><td class="amount">1 000 000 GNF</td><td>Secrétariat</td></tr>
+        </tbody>
+      </table>
+      <div class="mini-item" style="padding:14px 22px;">
+        <span class="name">Reste à payer</span>
+        <span class="due">1 000 000 GNF</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- NOTES -->
+  <div class="view" id="notes">
+    <div class="topbar">
+      <div>
+        <h1>Notes</h1>
+        <p>Bulletin — 2ème trimestre</p>
+      </div>
+      <button class="btn btn-primary">Générer le bulletin</button>
+    </div>
+
+    <div class="panel">
+      <div class="panel-head">
+        <h2>Ibrahima Sow — 3ème A</h2>
+        <span class="hint">Moyenne générale : 14,2/20</span>
+      </div>
+      <table>
+        <thead><tr><th>Matière</th><th>Devoir 1</th><th>Devoir 2</th><th>Composition</th><th>Moyenne</th></tr></thead>
+        <tbody>
+          <tr><td>Mathématiques</td><td class="amount">14/20</td><td class="amount">15/20</td><td class="amount">16/20</td><td class="amount">15,0/20</td></tr>
+          <tr><td>Français</td><td class="amount">12/20</td><td class="amount">13/20</td><td class="amount">14/20</td><td class="amount">13,0/20</td></tr>
+          <tr><td>Sciences physiques</td><td class="amount">15/20</td><td class="amount">14/20</td><td class="amount">15/20</td><td class="amount">14,7/20</td></tr>
+          <tr><td>Histoire-Géographie</td><td class="amount">13/20</td><td class="amount">14/20</td><td class="amount">13/20</td><td class="amount">13,3/20</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <footer class="note">Maquette non fonctionnelle — sert de base pour construire la version no-code (Glide / Softr / Airtable)</footer>
+</div>
+
+<script>
+  document.querySelectorAll('.nav-item').forEach(item=>{
+    item.addEventListener('click', ()=>{
+      document.querySelectorAll('.nav-item').forEach(i=>i.classList.remove('active'));
+      document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
+      item.classList.add('active');
+      document.getElementById(item.dataset.view).classList.add('active');
+    });
+  });
+  document.querySelectorAll('.filter-chip').forEach(chip=>{
+    chip.addEventListener('click', ()=>{
+      document.querySelectorAll('.filter-chip').forEach(c=>c.classList.remove('active'));
+      chip.classList.add('active');
+    });
+  });
+</script>
+
+</body>
+</html>
